@@ -1,0 +1,11 @@
+data:
+  num_train: 10240
+  num_valid: 2560
+  global_scale: [1.0, 2.0]
+
+train:
+  batch_size: 2048
+  num_epoch: 2000
+  lr: 1.0e-3
+  beta: 1.0
+  optimizer: Adam
