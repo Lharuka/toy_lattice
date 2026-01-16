@@ -8,9 +8,9 @@ import yaml
 with open("config.yaml", "r") as f:
     cfg = yaml.safe_load(f)
 
-num_train = cfg["data"]["num_train"]
-num_valid = cfg["data"]["num_valid"]
-scale = cfg["data"]["global_scale"]
+num_train = cfg["num_train"]
+num_valid = cfg["num_valid"]
+scale = cfg["global_scale"]
 train_data = make_perturbed_lattice(num_train, global_scale=scale)
 valid_data = make_perturbed_lattice(num_valid, global_scale=scale)
 train_data_1d = train_data.reshape(num_train, -1)
@@ -24,19 +24,19 @@ torch.save(sigma, "sigma.pt")
 train_data_z = (train_data_1d - mu) / sigma
 valid_data_z = (valid_data_1d - mu) / sigma
 
-batch_size = cfg["train"]["batch_size"]
+batch_size = cfg["batch_size"]
 train_set = TensorDataset(train_data_z)
 valid_set = TensorDataset(valid_data_z)
 train_loader = DataLoader(train_set, batch_size, shuffle=True)
 valid_loader = DataLoader(valid_set, batch_size, shuffle=False)
 
 model = VAE()
-lr = cfg["train"]["lr"]
-num_epoch = cfg["train"]["num_epoch"]
-beta = cfg["train"]["beta"]
+lr = cfg["lr"]
+num_epoch = cfg["num_epoch"]
+beta = cfg["beta"]
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
-if cfg["train"]["optimizer"] == "Adam":
+if cfg["optimizer"] == "Adam":
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 else:
     optimizer = torch.optim.SGD(model.parameters(), lr=lr)
